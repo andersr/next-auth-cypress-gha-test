@@ -32,9 +32,11 @@ declare global {
 Cypress.Commands.add("login", () => {
   cy.session("login", () => {
     cy.task("seedDB", { sessionToken: session.sessionToken });
+    Cypress.Cookies.debug(true); // this does not appear to be logging anything - https://github.com/cypress-io/cypress/issues/19745 (?)
     cy.clearCookies();
+
+    // ***** THIS COOKIES IS BEING SET ONLY IN DEV MODE AND NOT WHEN USIING cy run *****
     cy.setCookie("next-auth.session-token", session.sessionToken, {
-      httpOnly: true,
       expiry: 1661406204,
       sameSite: "lax",
       domain: "127.0.0.1",
