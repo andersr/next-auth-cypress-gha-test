@@ -1,0 +1,4 @@
+{
+  "cookieName": "next-auth.session-token",
+  "sessionToken": "abc123"
+}
