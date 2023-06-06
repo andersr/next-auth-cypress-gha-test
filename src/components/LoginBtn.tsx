@@ -4,16 +4,20 @@ export function LoginBtn() {
   const { data: session } = useSession();
   if (session) {
     return (
-      <div data-testid="isSignedIn">
+      <div>
         Signed in as {session.user?.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <button data-testid="signOutBtn" onClick={() => signOut()}>
+          Sign out
+        </button>
       </div>
     );
   }
   return (
-    <div data-testid="notSignedIn">
+    <div>
       Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      <button data-testid="signInBtn" onClick={() => signIn()}>
+        Sign in
+      </button>
     </div>
   );
 }
