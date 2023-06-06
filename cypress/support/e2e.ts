@@ -30,23 +30,28 @@ declare global {
 }
 
 Cypress.Commands.add("login", () => {
-  cy.session("login", () => {
-    cy.task("seedDB", { sessionToken: session.sessionToken });
-    Cypress.Cookies.debug(true); // this does not appear to be logging anything - https://github.com/cypress-io/cypress/issues/19745 (?)
-    cy.clearCookies();
+  cy.session(
+    [session.sessionToken],
+    () => {
+      cy.task("seedDB", { sessionToken: session.sessionToken });
 
-    // ***** THIS COOKIES IS BEING SET ONLY IN DEV MODE AND NOT WHEN USIING cy run *****
-    cy.setCookie("next-auth.session-token", session.sessionToken, {
-      expiry: 1661406204,
-      sameSite: "lax",
-      domain: "127.0.0.1",
-      path: "/",
-    });
-    cy.intercept("GET", "/api/auth/session", {
-      statusCode: 304,
-      fixture: "current-user.json",
-    });
-  });
+      cy.setCookie("next-auth.session-token", session.sessionToken, {
+        expiry: 1661406204,
+        sameSite: "lax",
+        domain: "127.0.0.1",
+        path: "/",
+      });
+      cy.intercept("GET", "/api/auth/session", {
+        statusCode: 200,
+        fixture: "current-user.json",
+      });
+    },
+    {
+      validate() {
+        cy.request("/api/auth/session").its("status").should("eq", 200);
+      },
+    }
+  );
 });
 
 // domain: 'localhost',
