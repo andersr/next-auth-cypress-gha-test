@@ -27,7 +27,7 @@ describe("Homepage - signed in", () => {
     //   statusCode: 304,
     //   fixture: "current-user.json",
     // }).as("userSession");
-    // cy.login();
+    cy.login();
     cy.visit("/");
   });
   it("Has a sign out button", () => {
